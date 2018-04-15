@@ -8,10 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.userservice.entities.User;
@@ -50,6 +54,48 @@ public class UserController {
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 
 	}
+
+	@GetMapping(value = "/find")
+	public HttpEntity<User> findById(@RequestParam(name = "eid", defaultValue = "1") String id,
+			@RequestParam(name = "ename", defaultValue = "max") String ename) {
+
+		System.out.println("Ename--" + ename);
+
+		User user = userService.findById(id);
+
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/findPath/{eid}")
+	public HttpEntity<User> findByPathId(@PathVariable(name = "eid", required = false) String id) {
+
+		if (id == null) {
+			id = String.valueOf(2);
+		}
+
+		User user = userService.findById(id);
+
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/update")
+	public HttpEntity<User> update(@RequestBody User user) {
+
+		user = userService.update(user);
+
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+
+	}
+	
+	@DeleteMapping(value = "/delete/{eid}")
+	public HttpEntity<Void> delete(@PathVariable String eid) {
+
+		userService.delete(eid);
+
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+
+	}
+	
 
 	// @RequestMapping(value="/create",method=RequestMethod.POST)
 	/*

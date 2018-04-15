@@ -45,4 +45,30 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public User findById(String id) {
+
+		return memory.get(Integer.parseInt(id));
+	}
+
+	@Override
+	public User update(User user) {
+
+		 memory.put(user.getUserId(), user);
+		
+		 return user;
+		
+	}
+
+	@Override
+	public void delete(String id) {
+		
+		memory.remove(Integer.parseInt(id));
+		
+	}
+	
+	
+
+	
+	
 }

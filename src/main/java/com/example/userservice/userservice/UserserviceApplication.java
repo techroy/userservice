@@ -1,12 +1,11 @@
 package com.example.userservice.userservice;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan(basePackages="com.example")
+@SpringBootApplication(scanBasePackages="com.example")
+//@EnableAutoConfiguration
+//@ComponentScan(basePackages="com.example")
 public class UserserviceApplication {
 
 	public static void main(String[] args) {
