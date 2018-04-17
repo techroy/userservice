@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,7 +30,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping(value = "/create")
+	@PostMapping(value = "/create",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<String> create(@RequestBody User user) {
 
 		System.out.println(user);
@@ -66,7 +67,7 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/findPath/{eid}")
+	@GetMapping(value = "/findPath/{eid}",produces={MediaType.APPLICATION_JSON_VALUE})
 	public HttpEntity<User> findByPathId(@PathVariable(name = "eid", required = false) String id) {
 
 		if (id == null) {
@@ -77,8 +78,20 @@ public class UserController {
 
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value = "/findPathName/{name}",produces={MediaType.APPLICATION_JSON_VALUE})
+	public HttpEntity<User> findByPathName(@PathVariable(name = "name", required = false) String name) {
 
-	@PutMapping(value = "/update")
+		
+		User user = userService.finUserByName(name);
+
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
+	
+
+	@PutMapping(value = "/update",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<User> update(@RequestBody User user) {
 
 		user = userService.update(user);
@@ -87,7 +100,7 @@ public class UserController {
 
 	}
 	
-	@DeleteMapping(value = "/delete/{eid}")
+	@DeleteMapping(value = "/delete/{eid}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<Void> delete(@PathVariable String eid) {
 
 		userService.delete(eid);

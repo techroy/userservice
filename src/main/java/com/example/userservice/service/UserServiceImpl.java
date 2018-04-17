@@ -6,39 +6,40 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.userservice.entities.User;
+import com.example.userservice.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	HashMap<Integer, User> memory = new HashMap<Integer, User>();
+	@Autowired
+	private UserRepository userRepository;
 
+	@Transactional
 	@Override
 	public void create(User user) {
 
-		memory.put(user.getUserId(), user);
+		userRepository.save(user);
 
 	}
 
 	@Override
 	public List<User> findAll() {
 
-		Set<Integer> keySet = memory.keySet();
+		Iterable<User> userIterator = userRepository.findAll();
 
 		List<User> userList = new ArrayList<User>();
 
-		Iterator<Integer> it = keySet.iterator();
+		Iterator it = userIterator.iterator();
 
 		while (it.hasNext()) {
 
-			int key = it.next();
-
-			User user = memory.get(key);
-
-			userList.add(user);
-
+			userList.add((User) it.next());
 		}
 
 		return userList;
@@ -48,27 +49,31 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(String id) {
 
-		return memory.get(Integer.parseInt(id));
+		return userRepository.findOne(Integer.parseInt(id));
 	}
 
+	@Transactional
 	@Override
 	public User update(User user) {
 
-		 memory.put(user.getUserId(), user);
-		
-		 return user;
-		
+		return userRepository.save(user);
+
+	}
+
+	@Transactional
+	@Override
+	public void delete(String id) {
+
+		userRepository.delete(Integer.parseInt(id));
+
 	}
 
 	@Override
-	public void delete(String id) {
+	public User finUserByName(String name) {
 		
-		memory.remove(Integer.parseInt(id));
-		
+		return userRepository.findByNameAndEmail(name,"adam1@gmail.com");
 	}
 	
 	
 
-	
-	
 }
